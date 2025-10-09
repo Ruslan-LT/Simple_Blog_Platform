@@ -92,6 +92,7 @@ venv.bak/
 *.iml
 *.ipr
 *.iws
+pyproject.toml
 
 # VSCode
 .vscode/
