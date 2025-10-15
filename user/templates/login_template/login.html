@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% load static %}
+{%  block links %}
+    <link type="text/css" rel="stylesheet" href="{% static 'login_page/login.css' %}">
+{% endblock %}
+{% block content %}
+<div class="login_page_container">
+    <img src="{% static 'logo/KuMessageLogo.png' %}" class="LogoImage">
+    <p class="LogoName">K</p>
+    <div class="login_container">
+        <div class="LoginLettersContainer">
+            <p class="LoginLetters">Login</p>
+        </div>
+        <div class="FormContainer">
+            <div class="ButtonContainer">
+                <button class="LoginButtonF" onclick="window.location.href='{% url 'user:login' %}'">Login</button>
+                <button class="SingUpButtonF">SingUp</button>
+            </div>
+            <input type="text" class='LoginInput' placeholder="Username or email">
+            <input type="text" class='PasswInput' placeholder="Password">
+            <button class="LoginButtonPOST" onclick="window.location.href='{% url 'user:login' %}'">Login</button>
+            <div class="SingUpContainer">
+                <p class="SingUpText">Don't have an account? </p><a href="#" class="SingUpHref">Sing Up</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

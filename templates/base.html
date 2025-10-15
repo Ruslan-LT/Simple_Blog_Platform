@@ -1,0 +1,15 @@
+{% load static %}
+<html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link type="text/css" href="{% static 'base.css' %}" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
+    {% block links %}{% endblock %}
+</head>
+<body>
+{%  block header %}{%  endblock %}
+{% block content %}{% endblock %}
+</body>
+</html>

@@ -1,0 +1,11 @@
+{% load static %}
+{% block header %}
+    <div class="header">
+        <div class="LogoContainer">
+            <img src="{% static 'logo/KuMessageLogo.png'%}" alt="KuMessageLogo" class="LogoImg">
+            <p class="LogoName" >KuMessage</p>
+        </div>
+        <button class="loginButton" onclick="window.location.href='{% url 'user:login' %}'">Login</button>
+    </div>
+    <div class="line"></div>
+{% endblock %}
