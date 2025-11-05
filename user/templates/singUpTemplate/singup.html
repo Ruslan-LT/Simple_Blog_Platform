@@ -1,0 +1,65 @@
+
+{% extends 'base.html' %}
+{% load static %}
+
+{% block links %}
+    <link type="text/css" rel="stylesheet" href="{% static 'login_page/login.css' %}">
+    <link type="text/css" rel="stylesheet" href="{% static 'signup_page/signup.css'%}">
+{% endblock %}
+{% block content %}
+    <div class="login_page_container">
+    <img src="{% static 'logo/KuMessageLogo.png' %}" class="LogoImage">
+    <p class="LogoName">K</p>
+    <div class="login_container">
+        <div class="LoginLettersContainer">
+            <p class="LoginLetters">SignUp</p>
+        </div>
+        <div class="FormContainer">
+            <div class="ButtonContainer">
+                <button class="LoginButtonF" onclick="window.location.href='{% url 'user:login' %}'">Login</button>
+                <button class="SingUpButtonF">SignUp</button>
+            </div>
+            <form method="post">
+                {% csrf_token %}
+
+                {% if form.non_field_errors %}
+                    <div class="errorlist nonfield">
+                        {% for error in form.non_field_errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
+                <label for="username_id">Юзернейм (нікнейм)</label>
+                <div class="error_div">{{ form.username.errors }}</div>
+                <input type="text" class='UsernameInp' placeholder="Username" id="username_id" name="username">
+
+                <label for="first_name_id">Ім'я</label>
+                 <div class="error_div">{{ form.first_name.errors }}</div>
+                <input type="text" class='FirstNameInp' placeholder="First Name" id="first_name_id" name="first_name">
+
+                <label for="last_name_id">Прізвисько</label>
+                 <div class="error_div">{{ form.last_name.errors }}</div>
+                <input type="text" class='LastNameInp' placeholder="Last Name" id="last_name_id" name="last_name">
+
+                <label for="email_id">Електронна пошта</label>
+                 <div class="error_div">{{ form.email.errors }}</div>
+                <input type="text" class='EmailInp' placeholder="Email" id="email_id" name="email">
+
+                <label for="password1_id">Пароль</label>
+                 <div class="error_div">{{ form.password1.errors }}</div>
+                <input type="password" class='PasswordInp' placeholder="Password" id="password1_id" name="password1">
+
+                <label for="password2_id">Підтвердіть пароль</label>
+                <div class="error_div">{{ form.password2.errors }}</div>
+                <input type="password" class='PasswordInp' placeholder="Repeat password" id="password2_id" name="password2">
+
+                <button class="SingUpButtonPOST" type="submit">SignUp</button>
+            </form>
+
+            <div class="SingUpContainer">
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

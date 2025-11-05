@@ -1,11 +1,21 @@
 {% load static %}
 {% block header %}
     <div class="header">
-        <div class="LogoContainer">
-            <img src="{% static 'logo/KuMessageLogo.png'%}" alt="KuMessageLogo" class="LogoImg">
-            <p class="LogoName" >KuMessage</p>
-        </div>
-        <button class="loginButton" onclick="window.location.href='{% url 'user:login' %}'">Login</button>
+        <nav class="main_nav">
+            <div class="LogoContainer">
+                <img src="{% static 'logo/KuMessageLogo.png'%}" alt="KuMessageLogo" class="LogoImg">
+                <p class="LogoName" >KuMessage</p>
+            </div>
+        </nav>
+        <nav class="main_nav buttons_nav">
+            {% if not user.is_authenticated %}
+            <button class="loginButton" onclick="window.location.href='{% url 'user:login' %}'">Login</button>
+            {% else %}
+                <a onclick="window.location.href='{% url 'user:profile' %}'"><p class="username_main"><i class='bx  bx-user'  style='color:#000000'></i>{{ user.username }}</p></a>
+
+                <button class="loginButton" onclick="window.location.href='{% url 'user:login' %}'">Logout</button>
+            {% endif %}
+        </nav>
     </div>
     <div class="line"></div>
 {% endblock %}
