@@ -1,1 +1,47 @@
 {% extends 'base.html' %}
+{% load static %}
+{% block links %}
+    <link type="text/css" rel="stylesheet" href="{% static 'profile_page/profile.css' %}">
+{% endblock %}
+{% block header %}
+    <div class="including_div">
+    {% include 'includes/header.html' %}
+    </div>
+{% endblock %}
+{% block content %}
+<div class="main_div">
+    <form>
+        <div class="info_div">
+            <div class="image_div">
+                {% if user.image %}
+                    <img class="user_img" src="{{ user.image }}" id="img">
+                    <input type="file" name="image" class="file_input">
+                {% else %}
+                    <img class="user_img" src="{% static 'user_image/user_image.png' %}">
+                    <input type="file" name="image" class="file_input">
+                {% endif %}
+                {% if form.image.errors %}
+                    <div>{{ form.image.errors }}</div>
+                {% endif %}
+            </div>
+            <div class="digital_div">
+                <div class="name_div"><p>Ім'я</p></div>
+                <div class="num_div">
+                    <div class="num_div_info">
+                        <p>Відстежують</p>
+                        <p>25</p>
+                    </div>
+                    <div class=num_div_info>
+                        <p>Відстежуються</p>
+                        <p>72</p>
+                    </div>
+                    <div class=num_div_info>
+                        <p>Публікації</p>
+                        <p>6</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+{% endblock %}

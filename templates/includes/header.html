@@ -2,7 +2,7 @@
 {% block header %}
     <div class="header">
         <nav class="main_nav">
-            <div class="LogoContainer">
+            <div class="LogoContainer" onclick="window.location.href='{% url  'main:main_view' %}'">
                 <img src="{% static 'logo/KuMessageLogo.png'%}" alt="KuMessageLogo" class="LogoImg">
                 <p class="LogoName" >KuMessage</p>
             </div>
@@ -12,6 +12,13 @@
             <button class="loginButton" onclick="window.location.href='{% url 'user:login' %}'">Login</button>
             {% else %}
                 <a onclick="window.location.href='{% url 'user:profile' %}'"><p class="username_main"><i class='bx  bx-user'  style='color:#000000'></i>{{ user.username }}</p></a>
+
+                <form class="form_search" method="get" action="{% url 'main:search' %}">
+                    <div class="form_search_div">
+                        <input class="search_input" type="text" placeholder="Search" name="q" aria-label="Search">
+                        <button class="search_button" style="margin: 20px" type="submit">Пошук</button>
+                    </div>
+                </form>
 
                 <button class="loginButton" onclick="window.location.href='{% url 'user:login' %}'">Logout</button>
             {% endif %}

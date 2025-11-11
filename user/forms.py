@@ -41,9 +41,24 @@ class LoginForm(forms.Form):
 
 class RegistrationForm(forms.ModelForm):
 
+    password1 = forms.CharField(
+        max_length=30, widget=forms.PasswordInput(attrs={"class": "PasswordInp"})
+    )
+    password2 = forms.CharField(
+        max_length=30, widget=forms.PasswordInput(attrs={"class": "PasswordInp"})
+    )
+
     class Meta:
         model = User
-        fields = ("username", "first_name", "last_name", "email")
+        fields = (
+            "username",
+            "first_name",
+            "last_name",
+            "email",
+            "password1",
+            "password2",
+            "password",
+        )
 
     def clean(self):
         cleaned_data = super().clean()

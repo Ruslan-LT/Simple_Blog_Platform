@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block links %}<link type="text/css" rel="stylesheet" href="{% static 'search_page/search_page.css' %}">{% endblock %}
+{%  block header %}{% include 'includes/header.html' %}{%  endblock %}
+{% block content %}
+    <div class="main_search_div">
+        {% for res in search_result %}
+            <div class="res_card">
+                <div class="img_div">
+                    {% if res.image %}
+                    <img class="res_img" src="{{ res.image }}" id="img">
+                {% else %}
+                    <img class="res_img" src="{% static 'user_image/user_image.png' %}">
+                {% endif %}
+                </div>
+
+                <div class="inf_div">
+
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}
