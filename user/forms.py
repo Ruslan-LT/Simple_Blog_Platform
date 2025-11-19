@@ -33,6 +33,8 @@ class LoginForm(forms.Form):
         if user.is_blocked:
             raise ValidationError("Ваш обліковий запис заблоковано.")
 
+        self.user_cache = user
+
         return cleaned_data
 
     def get_user(self):

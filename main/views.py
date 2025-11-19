@@ -10,10 +10,7 @@ def main_view(request):
 
 def search_view(request):
     query = request.GET.get("q")
-    if query:
-        search_result = q_search(query)
-    else:
-        search_result = User.objects.all()
+    search_result = q_search(query)
     return render(
         request, "search_results/search_result.html", {"search_result": search_result}
     )

@@ -12,7 +12,13 @@
             <button class="loginButton" onclick="window.location.href='{% url 'user:login' %}'">Login</button>
             {% else %}
                 <a onclick="window.location.href='{% url 'user:profile' %}'"><p class="username_main"><i class='bx  bx-user'  style='color:#000000'></i>{{ user.username }}</p></a>
-
+                <div class="header_coins">
+{#                    <img src="{% static 'kukoin_img/KuKoin1.png' %}" alt="KuKoin">#}
+{#                    <i class='bx  bx-wallet-note wallet_href' style='color:#000000'></i>#}
+{#                    <p>{{ user.coins }}</p>#}
+                    <i class='bx  bx-wallet-alt' style='color:#FFFFFF'></i>
+                    <p>Мій баланс</p>
+                </div>
                 <form class="form_search" method="get" action="{% url 'main:search' %}">
                     <div class="form_search_div">
                         <input class="search_input" type="text" placeholder="Search" name="q" aria-label="Search">

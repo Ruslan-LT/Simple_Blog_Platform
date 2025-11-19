@@ -5,19 +5,36 @@
 {% block content %}
     <div class="main_search_div">
         {% for res in search_result %}
-            <div class="res_card">
-                <div class="img_div">
-                    {% if res.image %}
-                    <img class="res_img" src="{{ res.image }}" id="img">
-                {% else %}
-                    <img class="res_img" src="{% static 'user_image/user_image.png' %}">
-                {% endif %}
-                </div>
+            <form method="get" class="card_form" action="{% url 'user:profile' %}">
+                <input type="hidden" value="{{ res.id }}" name="user_id">
+                <div class="res_card">
+                    <div class="img_div">
+                        {% if res.image %}
+                        <img class="res_img" src="{{ res.image }}" id="img">
+                    {% else %}
+                        <img class="res_img" src="{% static 'user_image/user_image.png' %}">
+                    {% endif %}
+                    </div>
 
-                <div class="inf_div">
-
+                    <div class="inf_div">
+                        <div class="name_nickname_div">
+                            <div>{{ res.first_name }} {{ res.last_name }}</div>
+                            <div>{{ res.username }}</div>
+                        </div>
+                        <div class="other_info_div">
+                            <div class="subscribers_search_res">
+                                <p>Слідкують:</p>
+                                <p>{{ res.followers_count }}</p>
+                            </div>
+                            <div class="subscriptions_search_res">
+                                <p>Слідкування:</p>
+                                <p>{{ res.following_count }}</p>
+                            </div>
+                        </div>
+                        <button type="submit" class="card_button">Перейти</button>
+                    </div>
                 </div>
-            </div>
+            </form>
         {% endfor %}
     </div>
 {% endblock %}

@@ -12,11 +12,12 @@ class User(AbstractUser):
     image = models.ImageField(upload_to="user/images/", null=True, blank=True)
     coins = models.PositiveIntegerField(default=10)
     is_blocked = models.BooleanField(default=False)
-    subscribers = models.ManyToManyField(
+
+    followers = models.ManyToManyField(
         "self",
-        related_name="subscriptions",
+        related_name="following",
         symmetrical=False,
-        through="UserSubscribers",
+        through="UserFollowers",
     )
 
     class Meta:
@@ -25,17 +26,17 @@ class User(AbstractUser):
         verbose_name_plural = "users"
 
 
-class UserSubscribers(models.Model):
+class UserFollowers(models.Model):
     date = models.DateTimeField(auto_now_add=True)
     user = models.ForeignKey(
-        User, on_delete=models.CASCADE, related_name="user_subscribers"
+        User, on_delete=models.CASCADE, related_name="user_followers"
     )
-    subscriber = models.ForeignKey(
-        User, on_delete=models.CASCADE, related_name="user_subscriptions"
+    follower = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name="user_following"
     )
 
     class Meta:
-        unique_together = ("user", "subscriber")
+        unique_together = ("user", "follower")
 
 
 class Settings(models.Model):

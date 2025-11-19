@@ -10,38 +10,62 @@
 {% endblock %}
 {% block content %}
 <div class="main_div">
-    <form>
+    <div class="main_div_parent">
         <div class="info_div">
             <div class="image_div">
-                {% if user.image %}
-                    <img class="user_img" src="{{ user.image }}" id="img">
-                    <input type="file" name="image" class="file_input">
-                {% else %}
-                    <img class="user_img" src="{% static 'user_image/user_image.png' %}">
-                    <input type="file" name="image" class="file_input">
-                {% endif %}
-                {% if form.image.errors %}
-                    <div>{{ form.image.errors }}</div>
-                {% endif %}
+                    {% if user_to_find.image %}
+                        <img class="user_img" src="{{ user_to_find.image }}" id="img">
+                    {% else %}
+                        <img class="user_img" src="{% static 'user_image/user_image.png' %}">
+                    {% endif %}
+                    {% if form.image.errors %}
+                        <div>{{ form.image.errors }}</div>
+                    {% endif %}
             </div>
             <div class="digital_div">
-                <div class="name_div"><p>Ім'я</p></div>
+                <div class="name_div">
+                    <p>{{ user_to_find.first_name }}</p>
+                    <p>{{ user_to_find.last_name }}</p>
+
+                </div>
+                <div class="username_div">
+                    <p>{{ user_to_find.username }}</p>
+                </div>
                 <div class="num_div">
                     <div class="num_div_info">
                         <p>Відстежують</p>
-                        <p>25</p>
+                        <p>{{ followers }}</p>
                     </div>
                     <div class=num_div_info>
                         <p>Відстежуються</p>
-                        <p>72</p>
+                        <p>{{ following }}</p>
                     </div>
                     <div class=num_div_info>
                         <p>Публікації</p>
                         <p>6</p>
                     </div>
                 </div>
+                <div class="following_form_div">
+                    {% if not requested_user %}
+                        {% if not is_following %}
+                            <form class="following_form" method="post" action="{% url 'user:follow' %}">
+                                <input type="hidden" name="user_id" value="{{ user_to_find.id }}">
+                                {% csrf_token %}
+                                <button class="follow_button">Слідкувати <i class='bx  bx-user-check icon' style='color:#FFFFFF'></i> </button>
+                            </form>
+                        {% else %}
+                            <form class="following_form" method="post" action="{% url 'user:unfollow' %}">
+                                <input type="hidden" name="user_id" value="{{ user_to_find.id }}">
+                                {% csrf_token %}
+                                <button class="unfollow_button">Перестати слідкувати <i class='bx  bx-user-minus icon' style='color:#FFFFFF'></i></button>
+                            </form>
+                        {% endif %}
+                    {% else %}
+                            <button class="change_profile_button">Змінити профіль</button>
+                    {% endif %}
+                </div>
             </div>
         </div>
-    </form>
+    </div>
 </div>
 {% endblock %}

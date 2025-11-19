@@ -19,7 +19,7 @@
                 <button class="LoginButtonF" onclick="window.location.href='{% url 'user:login' %}'">Login</button>
                 <button class="SingUpButtonF">SignUp</button>
             </div>
-            <form method="post">
+            <form method="post" action="{% url 'user:signup' %}">
                 {% csrf_token %}
 
                 {% if form.non_field_errors %}
