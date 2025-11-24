@@ -26,7 +26,6 @@
                 <div class="name_div">
                     <p>{{ user_to_find.first_name }}</p>
                     <p>{{ user_to_find.last_name }}</p>
-
                 </div>
                 <div class="username_div">
                     <p>{{ user_to_find.username }}</p>
@@ -41,8 +40,8 @@
                         <p>{{ following }}</p>
                     </div>
                     <div class=num_div_info>
-                        <p>Публікації</p>
-                        <p>6</p>
+                        <p>Друзі</p>
+                        <p>{{ friends }}</p>
                     </div>
                 </div>
                 <div class="following_form_div">
@@ -60,8 +59,26 @@
                                 <button class="unfollow_button">Перестати слідкувати <i class='bx  bx-user-minus icon' style='color:#FFFFFF'></i></button>
                             </form>
                         {% endif %}
+                        {% if is_friend %}
+                            <form class="following_form" method="post" action="{% url 'user:unfollow' %}">
+                                <input type="hidden" name="user_id" value="{{ user_to_find.id }}">
+                                {% csrf_token %}
+                                <button class="remove_friend">Видалити з друзів <i class='bx  bx-user-minus icon' style='color:#FFFFFF'></i></button>
+                            </form>
+                        {% else %}
+                            {% if not is_sender %}
+                                <form class="following_form" method="post" action="{% url 'user:send_friend_request' %}">
+                                    <input type="hidden" name="user_id" value="{{ user_to_find.id }}">
+                                    {% csrf_token %}
+                                    <button class="add_friend_request">Додати друга <i class='bx  bx-user-plus icon' style='color:#FFFFFF'></i></button>
+                                </form>
+                            {% endif %}
+                        {% endif %}
                     {% else %}
-                            <button class="change_profile_button">Змінити профіль</button>
+                            <form class="chane_profile_form" method="post">
+                                <button class="change_profile_button">Змінити профіль</button>
+                            </form>
+                            {% if requested_user %}<a href="{% url 'user:add_friend_list' %}" style="text-decoration: none"><div class="friends_add"><i class='bx  bx-user-plus' style='color:#FFFFFF'></i> </div> </a>{% endif %}
                     {% endif %}
                 </div>
             </div>

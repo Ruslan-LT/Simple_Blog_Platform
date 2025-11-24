@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block links %}
+    <link type="text/css" rel="stylesheet" href="{% static 'friend_list_add/friend_list_add.css'%}">
+    <link type="text/css" rel="stylesheet" href="{% static 'search_page/search_page.css' %}">
+{% endblock %}
+{% block header %}
+    {% include 'includes/header.html' %}
+{% endblock %}
+{% block content %}
+    <div class="main_list_page_div">
+        <div class="main_list_div">
+        {% for req in friend_list_requests %}
+            <div class="card_form">
+                <input type="hidden" value="{{ req.id }}" name="user_id">
+                <div class="res_card">
+                    <div class="img_div">
+                        {% if res.image %}
+                        <img class="res_img" src="{{ req.image }}" id="img">
+                    {% else %}
+                        <img class="res_img" src="{% static 'user_image/user_image.png' %}">
+                    {% endif %}
+                    </div>
+
+                    <div class="inf_div">
+                        <div class="name_nickname_div">
+                            <div>{{ req.first_name }} {{ req.last_name }}</div>
+                            <div>{{ req.username }}</div>
+                        </div>
+                        <div class="other_info_div">
+                            <div class="subscribers_search_res">
+                                <p>Слідкують:</p>
+                                <p>{{ req.followers_count }}</p>
+                            </div>
+                            <div class="subscriptions_search_res">
+                                <p>Слідкування:</p>
+                                <p>{{ req.following_count }}</p>
+                            </div>
+                        </div>
+                        <div class="button_div">
+                            <form method="get"  action="{% url 'user:profile' %}">
+                                <input type="hidden" value="{{ req.id }}" name="user_id">
+                                <button type="submit" class="card_button">Перейти</button>
+                            </form>
+                            <form method="post"  action="{% url 'user:accept_request' %}">
+                                {% csrf_token %}
+                                <input type="hidden" value="{{ req.id }}" name="user_id">
+                                <button type="submit" class="button_accept"><i class='bx  bx-user-plus' style='color:#FFFFFF'></i> </button>
+                            </form>
+                            <form method="post"  action="{% url 'user:decline_request' %}">
+                                {% csrf_token %}
+                                <input type="hidden" value="{{ req.id }}" name="user_id">
+                                <button type="submit" class="button_decline"><i class='bx  bx-user-minus' style='color:#FFFFFF'></i> </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+        </div>
+    </div>
+{% endblock %}

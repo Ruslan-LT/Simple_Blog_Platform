@@ -4,7 +4,7 @@ from django.contrib.auth import authenticate
 from django.contrib.auth import login as auth_login
 from django.contrib.auth import logout as auth_logout
 from django.contrib.auth.decorators import login_required
-from django.db.models import Q
+from django.db.models import Count, Q
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
@@ -53,15 +53,12 @@ def image_url(instance, filename):
 
 @login_required
 def user_profile(request):
-    user_id = None
-    user_to_find = None
     is_following = False
     requested_user = False
+    is_sender = False
+    is_friend = False
 
-    if request.method == "POST":
-        user_id = request.POST.get("user_id")
-    else:
-        user_id = request.GET.get("user_id")
+    user_id = request.GET.get("user_id")
 
     if user_id is None or int(user_id) == request.user.id:
         user_to_find = request.user
@@ -70,9 +67,14 @@ def user_profile(request):
         user_to_find = get_object_or_404(User, id=user_id)
         if request.user in user_to_find.followers.all():
             is_following = True
+        if request.user in user_to_find.friends.all():
+            is_friend = True
+        if request.user in user_to_find.friend_requests.all():
+            is_sender = True
 
     followers = user_to_find.followers.count()
     following = user_to_find.following.count()
+    friends = user_to_find.friends.count()
 
     return render(
         request,
@@ -83,6 +85,9 @@ def user_profile(request):
             "following": following,
             "requested_user": requested_user,
             "is_following": is_following,
+            "is_friend": is_friend,
+            "is_sender": is_sender,
+            "friends": friends,
         },
     )
 
@@ -103,3 +108,43 @@ def unfollow_user(request):
     user_to_unfollow.followers.remove(request.user.id)
     user_to_unfollow.save()
     return redirect(request.META.get("HTTP_REFERER", reverse("user:profile")))
+
+
+@login_required
+def send_friend_request(request):
+    uid = request.POST.get("user_id")
+    recipient = get_object_or_404(User, id=uid)
+    recipient.friend_requests.add(request.user.id)
+    recipient.save()
+    return redirect(request.META.get("HTTP_REFERER", reverse("user:profile")))
+
+
+@login_required
+def accept_request(request):
+    uid = request.POST.get("user_id")
+    recipient = get_object_or_404(User, id=request.user.id)
+    recipient.friends.add(uid)
+    recipient.friend_requests.remove(uid)
+    recipient.save()
+    return redirect(request.META.get("HTTP_REFERER", reverse("user:profile")))
+
+
+@login_required
+def decline_request(request):
+    uid = request.POST.get("user_id")
+    recipient = get_object_or_404(User, id=request.user.id)
+    recipient.friend_requests.remove(uid)
+    recipient.save()
+    return redirect(request.META.get("HTTP_REFERER", reverse("user:profile")))
+
+
+@login_required
+def add_friend_list(request):
+    friend_list_requests = request.user.friend_requests.annotate(
+        following_count=Count("following"), followers_count=Count("followers")
+    )
+    return render(
+        request,
+        "add_friend_list_template/add_friend_list_template.html",
+        {"friend_list_requests": friend_list_requests},
+    )
