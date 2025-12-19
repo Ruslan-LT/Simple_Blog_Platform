@@ -1,2 +1,40 @@
 {% extends 'base.html' %}
-{%  block header %}{% include 'includes/header.html' %}{%  endblock %}
+{% load static %}
+{% block links %}
+<link type="text/css" rel="stylesheet" href="{% static 'main_page/main_page.css' %}">
+{% endblock %}
+{% block header %}
+    {% include 'includes/header.html' %}
+{% endblock %}
+
+{% block content %}
+<div class="main_div">
+
+    {% for post in posts %}
+    <div class="post_card">
+
+        <div class="post_header">
+
+            {% if post.user.image %}
+                <div class="avatar avatar_img" style="background-image: url('{{ post.user.image.url }}');"></div>
+            {% else %}
+                <div class="avatar avatar_text">{{ post.user.username|first|upper }}</div>
+            {% endif %}
+
+            <div class="post_meta">
+                <div class="author">{{ post.user.username }}</div>
+                <div class="date">{{ post.date|date:"d.m.Y H:i" }}</div>
+            </div>
+
+        </div>
+
+        <div class="post_body">
+            <h3 class="post_title">{{ post.title }}</h3>
+            <p class="post_content">{{ post.content|truncatewords:30 }}</p>
+        </div>
+
+    </div>
+    {% endfor %}
+
+</div>
+{% endblock %}

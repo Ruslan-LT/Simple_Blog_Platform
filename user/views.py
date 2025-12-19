@@ -10,7 +10,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.views.decorators.http import require_http_methods
 
-from .forms import LoginForm, RegistrationForm
+from .forms import LoginForm, ProfileForm, RegistrationForm
 from .models import User
 
 
@@ -42,13 +42,6 @@ def logout(request):
     if request.user.is_authenticated:
         auth_logout(request)
     return redirect("main:main_view")
-
-
-def image_url(instance, filename):
-    dir_name = (
-        f"{instance.first_name[0]}_{instance.last_name[0]}_{instance.username[0]}"
-    )
-    return f"user/images/{dir_name}/{filename}"
 
 
 @login_required
@@ -90,6 +83,23 @@ def user_profile(request):
             "friends": friends,
         },
     )
+
+
+def change_profile(request):
+    if request.method == "POST":
+        form = ProfileForm(
+            data=request.POST, files=request.FILES, instance=request.user
+        )
+        if form.is_valid():
+            form.save()
+        return HttpResponseRedirect(request.META.get("HTTP_REFERER"))
+    else:
+        form = ProfileForm(instance=request.user)
+        return render(
+            request,
+            "change_profile/change_profile.html",
+            context={"form": form},
+        )
 
 
 @login_required
@@ -148,3 +158,12 @@ def add_friend_list(request):
         "add_friend_list_template/add_friend_list_template.html",
         {"friend_list_requests": friend_list_requests},
     )
+
+
+@login_required
+def remove_friend(request):
+    uid = request.POST.get("user_id")
+    user = User.objects.get(id=request.user.id)
+    user.friends.remove(uid)
+    user.save()
+    return redirect(request.META.get("HTTP_REFERER", reverse("user:profile")))

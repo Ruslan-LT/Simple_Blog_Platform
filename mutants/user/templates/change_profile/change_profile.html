@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block links %}
+    <link type="text/css" rel="stylesheet" href="{% static 'change_profile/change_profile.css' %}">
+{% endblock %}
+{% block header %}
+    <div class="including_div">
+    {% include 'includes/header.html' %}
+    </div>
+{% endblock %}
+{% block content %}
+<div class="main_div">
+    <div class="profile_div">
+        <div class="profile_form">
+            <div class="form_title">
+                Профіль користувача
+            </div>
+            <form action="{% url 'user:change_profile' %}" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="img_div">
+                    <div class="image_div"
+                    style="background-image:{% if user.image %}url('{{ user.image.url }}'){% else %}url({% static 'user_image/user_image.png' %}){% endif %}">
+                </div>
+                    <input type="file" name="image">
+                    {% if form.non_field_errors %}
+                    <div class="errorlist nonfield">
+                        {% for error in form.non_field_errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                <div class="input_lbls_div">
+                    <div class="input_div">
+                         <label for="first_nameid"> Ім'я </label>
+                         <input type="text" id="first_nameid" placeholder="Введіть ваше ім'я"
+                         name="first_name" value="{{ form.first_name.value }}" required>
+                         {% if form.first_name.errors %}
+                         <div>{{ form.first_name.errors }}</div>
+                         {% endif %}
+                    </div>
+                    <div class="input_div">
+                        <label for="last_nameid">Фамілія</label>
+                        <input type="text" id="last_nameid" placeholder="Введіть вашу фамілію"
+                        name="last_name" value="{{ form.last_name.value }}" required>
+                        {% if form.last_name.errors %}
+                        <div>{{ form.last_name.errors }}</div>
+                        {% endif %}
+                    </div>
+                    <div class="input_div">
+                        <label for="username_id">Нікнейм</label>
+                        <input type="text" id="username_id" placeholder="Введіть нікнейм"
+                        name="username" value="{{ form.username.value }}" required>
+                        {% if form.username.errors %}
+                        <div>{{ form.username.errors }}</div>
+                        {% endif %}
+                    </div>
+                    <div class="input_div">
+                        <label for="email_id">Електронна почта</label>
+                        <input type="email" id="email_id" placeholder="Введіть вашу електронну почту"
+                        name="email" value="{{ form.email.value }}" required>
+                        {% if form.email.errors %}
+                        <div>{{ form.email.errors }}</div>
+                        {% endif %}
+                    </div>
+                    <div class="input_div">
+                        <label for="bio_id">Біографія</label>
+                        <input type="text" id="bio_id" placeholder="Введіть вашу біографію"
+                        name="bio" value="{{ form.bio.value }}" >
+                        {% if form.bio.errors %}
+                        <div>{{ form.bio.errors }}</div>
+                        {% endif %}
+                    </div>
+                    <div class="but_div">
+                        <button type="submit">Підтвердити</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -8,14 +8,9 @@
             <form method="get" class="card_form" action="{% url 'user:profile' %}">
                 <input type="hidden" value="{{ res.id }}" name="user_id">
                 <div class="res_card">
-                    <div class="img_div">
-                        {% if res.image %}
-                        <img class="res_img" src="{{ res.image }}" id="img">
-                    {% else %}
-                        <img class="res_img" src="{% static 'user_image/user_image.png' %}">
-                    {% endif %}
+                    <div class="img_div"
+                        style="background-image: {% if res.image %}url('{{ res.image.url }}'){% else %}url({% static 'user_image/user_image.png' %}){% endif %}">
                     </div>
-
                     <div class="inf_div">
                         <div class="name_nickname_div">
                             <div>{{ res.first_name }} {{ res.last_name }}</div>

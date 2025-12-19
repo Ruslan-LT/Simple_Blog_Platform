@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "main.apps.MainConfig",
     "user.apps.UserConfig",
+    "posts.apps.PostsConfig",
     "django_extensions",
 ]
 
@@ -77,17 +78,27 @@ WSGI_APPLICATION = "SimpleBlogPlatformProject.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
+import os
+
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": "SimpleBlogPlatformDB",
-        "USER": "RuslanJT",
-        "PASSWORD": "Ruslan1606",
-        "HOST": "localhost",
-        "PORT": 5432,
+        "NAME": os.getenv("POSTGRES_DB", "SimpleBlogPlatformDB"),
+        "USER": os.getenv("POSTGRES_USER", "RuslanJT"),
+        "PASSWORD": os.getenv("POSTGRES_PASSWORD", "Ruslan1606"),
+        "HOST": os.getenv("POSTGRES_HOST", "localhost"),
+        "PORT": os.getenv("POSTGRES_PORT", 5432),
     }
 }
 
+
+if os.getenv("MUTATION_TESTING") == "1":
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": ":memory:",
+        }
+    }
 
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
@@ -123,13 +134,16 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # h        ttps://docs.djangoproject.com/en/5.2/howto/static-files/
 
-STATIC_URL = "static/"
+STATIC_URL = "/static/"
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 
-STATICFILES_DIRS = [BASE_DIR / "static", "static"]
+
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "static"),
+]
 
 MEDIA_URL = "/media/"
-
-MEDIA_ROOT = BASE_DIR / "media"
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
 AUTH_USER_MODEL = "user.User"
 

@@ -1,7 +1,10 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
-# Create your models here.
+
+def image_url(instance, filename):
+    username_prefix = instance.username[:1].lower()
+    return f"user/images/{username_prefix}/{filename}"
 
 
 class User(AbstractUser):
@@ -9,9 +12,10 @@ class User(AbstractUser):
     last_name = models.CharField(max_length=35)
     username = models.CharField(max_length=35, unique=True)
     email = models.EmailField(max_length=100, unique=True)
-    image = models.ImageField(upload_to="user/images/", null=True, blank=True)
+    image = models.ImageField(upload_to=image_url, null=True, blank=True)
     coins = models.PositiveIntegerField(default=10)
     is_blocked = models.BooleanField(default=False)
+    bio = models.TextField(blank=True, null=True, max_length=500)
     followers = models.ManyToManyField(
         "self",
         related_name="following",
@@ -84,8 +88,3 @@ class TransactionsLog(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     date = models.DateTimeField(auto_now_add=True)
     transaction = models.CharField(max_length=100)
-
-
-class Profile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    bio = models.TextField(blank=True, null=True, max_length=500)

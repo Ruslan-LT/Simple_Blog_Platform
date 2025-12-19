@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% load static %}
+{%  block links %}
+    <link type="text/css" rel="stylesheet" href="{% static 'login_page/login.css' %}">
+{% endblock %}
+{% block content %}
+<div class="login_page_container">
+    <img src="{% static 'logo/KuMessageLogo.png' %}" class="LogoImage">
+    <p class="LogoName">K</p>
+    <div class="login_container">
+        <div class="FormContainer">
+            <form method="post" action="{% url 'user:login' %}">
+                <div class="LoginLettersContainer">
+                    <p class="LoginLetters">Login</p>
+                </div>
+                <div class="ButtonContainer">
+                    <button class="LoginButtonF" onclick="window.location.href='{% url 'user:login' %}'">Login</button>
+                    <button class="SingUpButtonF" onclick="window.location.href='{% url 'user:signup'%}'">SignUp</button>
+                </div>
+                {% csrf_token %}
+                {% if form.non_field_errors %}
+                    <div class="errorlist nonfield">
+                        {% for error in form.non_field_errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+                {{ form.username.errors }}
+                <label for="{{ form.username.id_for_label }}">Ім'я користувача або електронна пошта</label>
+                {{ form.username }}
+                {{ form.password.errors }}
+                <label for="{{ form.password.id_for_label }}">Пароль</label>
+                {{ form.password }}
+                <button class="LoginButtonPOST" type="submit">Login</button>
+                <div class="SingUpContainer">
+                    <p class="SingUpText">Don't have an account? </p><a onclick="window.location.href='{% url 'user:signup' %}'" class="SingUpHref">Sign Up</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block links %}
+<link rel="stylesheet" href="{% static 'create_publication/create_publication.css' %}">
+{% endblock %}
+
+{% block header %}
+<div class="including_div">
+    {% include 'includes/header.html' %}
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="main_div">
+    <form class="create_publication_form" method="post" enctype="multipart/form-data" action="{% url 'posts:create_publication' %}">
+        {% csrf_token %}
+        <div class="create_publication_div">
+
+            <h2 class="form_title">Створити публікацію</h2>
+
+            <div class="form_group">
+                <label for="id_title">Заголовок</label>
+                {{ form.title }}
+            </div>
+
+            <div class="form_group">
+                <label for="id_content">Контент</label>
+                {{ form.content }}
+            </div>
+
+            <button type="submit" class="submit_btn">Опублікувати</button>
+
+        </div>
+    </form>
+</div>
+{% endblock %}

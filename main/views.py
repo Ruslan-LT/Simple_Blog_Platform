@@ -1,11 +1,13 @@
 from django.shortcuts import render
 
+from posts.models import Post
 from user.models import User
 from utils.search_func import q_search
 
 
 def main_view(request):
-    return render(request, "main_page/main.html")
+    posts = Post.objects.all().select_related("user")
+    return render(request, "main_page/main.html", {"posts": posts})
 
 
 def search_view(request):

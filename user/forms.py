@@ -98,3 +98,25 @@ class RegistrationForm(forms.ModelForm):
         if commit:
             user.save()
         return user
+
+
+class ProfileForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ("first_name", "last_name", "email", "username", "bio", "image")
+
+    def clean(self):
+        cleaned_data = super().clean()
+        username = cleaned_data.get("username")
+        email = cleaned_data.get("email")
+        if User.objects.filter(email=email).exclude(id=self.instance.id).exists():
+            self.add_error(
+                "email",
+                "На дану електронну пошту вже зареєстровано акаунт! Введіть іншу.",
+            )
+
+        if not set(username).issubset(set(ascii_letters + digits)):
+            self.add_error(
+                "username",
+                "У полі нікнейм дозволені лише латинські літери та цифри.",
+            )
