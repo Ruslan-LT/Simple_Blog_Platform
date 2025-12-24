@@ -1,11 +1,15 @@
 [flake8]
 max-line-length = 120
+
 exclude =
     venv,
     migrations,
     __pycache__,
     .git,
-    .github
+    .github,
+    mutants
 ignore =
     F401,
-    F841
+    F841,
+    E402,
+    F811
