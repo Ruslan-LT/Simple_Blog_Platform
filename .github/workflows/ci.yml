@@ -1,9 +1,9 @@
 name: CI
 
 on:
-  push:
-    branches: [ main ]
   pull_request:
+    branches: [ main ]
+  push:
     branches: [ main ]
 
 jobs:
@@ -14,7 +14,24 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Run stub CI
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
         run: |
-          echo "CI is running"
-          echo "All checks passed"
+          pip install -r requirements.txt
+          pip install black flake8 pytest
+
+      - name: Check code style (black)
+        run: black --check .
+
+      - name: Lint code (flake8)
+        run: flake8 .
+
+      - name: Django system check
+        run: python manage.py check
+
+      - name: Run tests
+        run: pytest
