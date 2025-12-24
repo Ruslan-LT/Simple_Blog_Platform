@@ -5,6 +5,9 @@ on:
     branches:
       - main
 
+permissions:
+  contents: write
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -17,8 +20,7 @@ jobs:
         run: |
           mkdir public
           echo "<h1>Simple Blog Platform</h1>" > public/index.html
-          echo "<p>CI/CD is working correctly.</p>" >> public/index.html
-          echo "<p>Deployed automatically via GitHub Actions.</p>" >> public/index.html
+          echo "<p>Deployed via GitHub Actions</p>" >> public/index.html
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
