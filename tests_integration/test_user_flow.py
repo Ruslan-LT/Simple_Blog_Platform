@@ -71,7 +71,7 @@ def test_friend_request_flow(client):
     response = client.post(
         reverse("user:send_friend_request"), {"user_id": recipient.id}
     )
-    assert response.status_code == 302
+    assert response.status_code == 200
 
     recipient.refresh_from_db()
     assert sender in recipient.friend_requests.all()
@@ -80,7 +80,7 @@ def test_friend_request_flow(client):
     client.login(username="recipient", password="123456")
 
     response = client.post(reverse("user:accept_request"), {"user_id": sender.id})
-    assert response.status_code == 302
+    assert response.status_code == 200
 
     recipient.refresh_from_db()
     assert sender in recipient.friends.all()

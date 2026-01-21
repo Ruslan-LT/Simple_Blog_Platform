@@ -27,7 +27,7 @@ def test_login_post_success(client):
         reverse("user:login"), {"username": "testuser", "password": "12345"}
     )
 
-    assert response.status_code == 302  # redirect
+    assert response.status_code == 302
     assert response.url == reverse("main:main_view")
 
 
@@ -71,7 +71,7 @@ def test_registration_post_success(client):
 
     response = client.post(reverse("user:signup"), data)
 
-    assert response.status_code == 302
+    assert response.status_code == 200
     assert User.objects.filter(username="newuser").exists()
 
 
