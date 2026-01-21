@@ -24,7 +24,7 @@ def test_full_user_flow(page: Page, test_user_data):
     page.fill("#id_password1", test_user_data["password"])
     page.fill("#id_password2", test_user_data["password"])
     page.click("text=Register")
-
+    ###
     expect(page.locator(".alert-success")).to_contain_text("successfully registered")
 
     page.click("text=Login")
