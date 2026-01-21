@@ -168,3 +168,4 @@ def remove_friend(request):
     user.friends.remove(uid)
     user.save()
     return redirect(request.META.get("HTTP_REFERER", reverse("user:profile")))
+    ###
