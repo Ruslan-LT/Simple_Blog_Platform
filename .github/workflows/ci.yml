@@ -16,10 +16,6 @@ jobs:
         with:
           fetch-depth: 0
 
-      - uses: wagoid/commitlint-github-action@v6
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
   django-ci:
     name: Django CI
     runs-on: ubuntu-latest

@@ -2,7 +2,10 @@ name: CD
 
 on:
   push:
-    branches: [main, master]
+    branches: [ main ]
+
+permissions:
+  contents: read
 
 jobs:
   deploy:
@@ -13,8 +16,9 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Trigger deploy
+      - name: Trigger deploy hook
         run: |
+          echo "Triggering deploy webhook..."
           curl -X POST "$DEPLOY_HOOK_URL"
         env:
           DEPLOY_HOOK_URL: ${{ secrets.DEPLOY_HOOK_URL }}
