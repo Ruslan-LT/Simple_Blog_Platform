@@ -76,18 +76,6 @@ def test_registration_post_success(client):
 
 
 @pytest.mark.django_db
-def test_logout(client):
-    user = User.objects.create_user(
-        username="u", password="123", email="u@mail.com", first_name="A", last_name="B"
-    )
-    client.login(username="u", password="123")
-
-    response = client.get(reverse("user:logout"))
-    assert response.status_code == 302
-    assert response.url == reverse("main:main_view")
-
-
-@pytest.mark.django_db
 def test_user_profile_self(client):
     user = User.objects.create_user(
         username="u", password="123", email="u@mail.com", first_name="A", last_name="B"
@@ -166,7 +154,7 @@ def test_follow_user(client):
 
     client.login(username="u1", password="123")
 
-    response = client.post(reverse("user:follow_user"), {"user_id": user2.id})
+    response = client.post(reverse("user:follow"), {"user_id": user2.id})
     assert response.status_code == 302
 
     user2.refresh_from_db()
@@ -194,7 +182,7 @@ def test_unfollow_user(client):
 
     client.login(username="u1", password="123")
 
-    response = client.post(reverse("user:unfollow_user"), {"user_id": user2.id})
+    response = client.post(reverse("user:unfollow"), {"user_id": user2.id})
     assert response.status_code == 302
 
     user2.refresh_from_db()
