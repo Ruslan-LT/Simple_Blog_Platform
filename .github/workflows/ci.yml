@@ -22,6 +22,13 @@ jobs:
     needs: commitlint
 
     steps:
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install flake8
+          pip install -r requirements.txt
+
       - name: Checkout code
         uses: actions/checkout@v4
 
@@ -29,11 +36,6 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: '3.13'
-
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
 
       - name: Django system check
         run: |
