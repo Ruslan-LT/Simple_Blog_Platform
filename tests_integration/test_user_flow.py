@@ -17,7 +17,7 @@ def test_full_user_flow(client):
         "email": "new@mail.com",
     }
 
-    response = client.post(reverse("user:registration"), registration_data)
+    response = client.post(reverse("user:signup"), registration_data)
     assert response.status_code == 302
     assert User.objects.filter(username="newuser").exists()
 
@@ -35,14 +35,14 @@ def test_full_user_flow(client):
         email="other@mail.com",
     )
 
-    response = client.post(reverse("user:follow_user"), {"user_id": other.id})
+    response = client.post(reverse("user:follow"), {"user_id": other.id})
     assert response.status_code == 302
 
     other.refresh_from_db()
     newuser = User.objects.get(username="newuser")
     assert newuser in other.followers.all()
 
-    response = client.post(reverse("user:unfollow_user"), {"user_id": other.id})
+    response = client.post(reverse("user:unfollow"), {"user_id": other.id})
     assert response.status_code == 302
 
     other.refresh_from_db()
