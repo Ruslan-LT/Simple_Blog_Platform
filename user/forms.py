@@ -84,10 +84,9 @@ class RegistrationForm(forms.ModelForm):
                 "На дану електронну пошту вже зареєстровано акаунт! Введіть іншу.",
             )
 
-        if not set(username).issubset(set(ascii_letters + digits)):
+        if username and not set(username).issubset(set(ascii_letters + digits)):
             self.add_error(
-                "username",
-                "У полі нікнейм дозволені лише латинські літери та цифри.",
+                "username", "У полі нікнейм дозволені лише латинські літери та цифри."
             )
 
         return cleaned_data
@@ -115,8 +114,7 @@ class ProfileForm(forms.ModelForm):
                 "На дану електронну пошту вже зареєстровано акаунт! Введіть іншу.",
             )
 
-        if not set(username).issubset(set(ascii_letters + digits)):
+        if username and not set(username).issubset(set(ascii_letters + digits)):
             self.add_error(
-                "username",
-                "У полі нікнейм дозволені лише латинські літери та цифри.",
+                "username", "У полі нікнейм дозволені лише латинські літери та цифри."
             )

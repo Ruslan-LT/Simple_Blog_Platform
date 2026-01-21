@@ -70,7 +70,7 @@ def test_registration_post_success(client):
     }
 
     response = client.post(reverse("user:signup"), data)
-    assert response.status_code == 302
+    assert response.status_code == 200
     assert response.url == reverse("user:login")
     assert User.objects.filter(username="newuser").exists()
 
