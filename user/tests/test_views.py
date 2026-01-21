@@ -71,7 +71,7 @@ def test_registration_post_success(client):
 
     response = client.post(reverse("user:signup"), data)
 
-    assert response.status_code == 200
+    assert response.status_code == 302
     assert User.objects.filter(username="newuser").exists()
 
 
@@ -129,6 +129,8 @@ def test_change_profile_post(client):
         {
             "first_name": "New",
             "last_name": "Surname",
+            "email": "u@mail.com",
+            "username": "u",
         },
         HTTP_REFERER="/profile/",
     )
@@ -138,6 +140,7 @@ def test_change_profile_post(client):
 
     user.refresh_from_db()
     assert user.first_name == "New"
+    assert user.last_name == "Surname"
 
 
 @pytest.mark.django_db

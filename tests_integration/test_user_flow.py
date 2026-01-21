@@ -7,7 +7,6 @@ User = get_user_model()
 
 @pytest.mark.django_db(transaction=True)
 def test_full_user_flow(client):
-
     registration_data = {
         "username": "newuser",
         "password1": "password1234",
@@ -22,10 +21,12 @@ def test_full_user_flow(client):
     assert User.objects.filter(username="newuser").exists()
 
     response = client.post(
-        reverse("user:login"), {"username": "newuser", "password": "password1234"}
+        reverse("user:login"),
+        {"username": "newuser", "password": "password1234"},
     )
-
     assert response.status_code == 302
+
+    newuser = User.objects.get(username="newuser")
 
     other = User.objects.create_user(
         username="other",
@@ -39,8 +40,13 @@ def test_full_user_flow(client):
     assert response.status_code == 302
 
     other.refresh_from_db()
-    newuser = User.objects.get(username="newuser")
     assert newuser in other.followers.all()
+
+    response = client.post(reverse("user:unfollow"), {"user_id": other.id})
+    assert response.status_code == 302
+
+    other.refresh_from_db()
+    assert newuser not in other.followers.all()
 
     response = client.post(reverse("user:unfollow"), {"user_id": other.id})
     assert response.status_code == 302
@@ -51,7 +57,6 @@ def test_full_user_flow(client):
 
 @pytest.mark.django_db(transaction=True)
 def test_friend_request_flow(client):
-    # Create users
     sender = User.objects.create_user(
         username="sender",
         password="123456",
@@ -69,9 +74,11 @@ def test_friend_request_flow(client):
 
     client.login(username="sender", password="123456")
     response = client.post(
-        reverse("user:send_friend_request"), {"user_id": recipient.id}
+        reverse("user:send_friend_request"),
+        {"user_id": recipient.id},
     )
-    assert response.status_code == 200
+
+    assert response.status_code == 302
 
     recipient.refresh_from_db()
     assert sender in recipient.friend_requests.all()
@@ -79,8 +86,12 @@ def test_friend_request_flow(client):
     client.logout()
     client.login(username="recipient", password="123456")
 
-    response = client.post(reverse("user:accept_request"), {"user_id": sender.id})
-    assert response.status_code == 200
+    response = client.post(
+        reverse("user:accept_request"),
+        {"user_id": sender.id},
+    )
+
+    assert response.status_code == 302
 
     recipient.refresh_from_db()
     assert sender in recipient.friends.all()
