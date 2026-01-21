@@ -28,12 +28,13 @@ def login(request):
 
 def registration(request):
     if request.method == "POST":
-        form = RegistrationForm(data=request.POST)
+        form = RegistrationForm(request.POST)
         if form.is_valid():
             form.save()
             return redirect("user:login")
     else:
         form = RegistrationForm()
+
     return render(request, "singUpTemplate/singup.html", {"form": form})
 
 

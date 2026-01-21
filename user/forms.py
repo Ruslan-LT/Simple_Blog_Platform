@@ -42,12 +42,13 @@ class LoginForm(forms.Form):
 
 
 class RegistrationForm(forms.ModelForm):
-
     password1 = forms.CharField(
-        max_length=30, widget=forms.PasswordInput(attrs={"class": "PasswordInp"})
+        max_length=30,
+        widget=forms.PasswordInput(attrs={"class": "PasswordInp"}),
     )
     password2 = forms.CharField(
-        max_length=30, widget=forms.PasswordInput(attrs={"class": "PasswordInp"})
+        max_length=30,
+        widget=forms.PasswordInput(attrs={"class": "PasswordInp"}),
     )
 
     class Meta:
@@ -57,9 +58,6 @@ class RegistrationForm(forms.ModelForm):
             "first_name",
             "last_name",
             "email",
-            "password1",
-            "password2",
-            "password",
         )
 
     def clean(self):
@@ -72,13 +70,13 @@ class RegistrationForm(forms.ModelForm):
         if password1 != password2:
             raise ValidationError("Паролі не співпадають.")
 
-        if User.objects.filter(username=username).exists():
+        if username and User.objects.filter(username=username).exists():
             self.add_error(
                 "username",
                 "Даний нікнейм користувача вже існує! Придумайте інший нікнейм.",
             )
 
-        if User.objects.filter(email=email).exists():
+        if email and User.objects.filter(email=email).exists():
             self.add_error(
                 "email",
                 "На дану електронну пошту вже зареєстровано акаунт! Введіть іншу.",
@@ -86,7 +84,8 @@ class RegistrationForm(forms.ModelForm):
 
         if username and not set(username).issubset(set(ascii_letters + digits)):
             self.add_error(
-                "username", "У полі нікнейм дозволені лише латинські літери та цифри."
+                "username",
+                "У полі нікнейм дозволені лише латинські літери та цифри.",
             )
 
         return cleaned_data
