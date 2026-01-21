@@ -2,28 +2,19 @@ name: CD
 
 on:
   push:
-    branches:
-      - main
-
-permissions:
-  contents: write
+    branches: [main, master]
 
 jobs:
   deploy:
+    name: Deploy to staging
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Create static site
+      - name: Trigger deploy
         run: |
-          mkdir public
-          echo "<h1>Simple Blog Platform</h1>" > public/index.html
-          echo "<p>Deployed via GitHub Actions</p>" >> public/index.html
-
-      - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./public
+          curl -X POST "$DEPLOY_HOOK_URL"
+        env:
+          DEPLOY_HOOK_URL: ${{ secrets.DEPLOY_HOOK_URL }}
