@@ -16,3 +16,4 @@ def search_view(request):
     return render(
         request, "search_results/search_result.html", {"search_result": search_result}
     )
+###
